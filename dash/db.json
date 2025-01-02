@@ -1,0 +1,82 @@
+{
+  "columns": [
+    {
+      "title": "To Do",
+      "tasks": [
+        {
+          "title": "Sugam Karmakar",
+          "description": "Hello I am sugam",
+          "status": "ToDo",
+          "startDate": "2024-12-05",
+          "endDate": "2024-12-25",
+          "designation": "React Developer",
+          "attachment": "Git-2.47.1-64-bit.exe",
+          "tags": [
+            ""
+          ]
+        },
+        {
+          "title": "Surajit Bera",
+          "description": "I am surajit",
+          "status": "To Do",
+          "startDate": "2024-12-05",
+          "endDate": "2024-12-27",
+          "designation": "UI/UX",
+          "attachment": "profit (1).png",
+          "tags": [
+            ""
+          ]
+        },
+        {
+          "title": "xzx",
+          "description": "xzxz",
+          "status": "xzx",
+          "startDate": "2024-12-05",
+          "endDate": "2024-12-05",
+          "designation": "xzxz",
+          "attachment": "profit (1).png",
+          "tags": [
+            ""
+          ]
+        },
+        {
+          "title": "wwww",
+          "description": "xzxx",
+          "status": "xzxz",
+          "startDate": "2024-12-07",
+          "endDate": "2024-12-07",
+          "designation": "dsdsd",
+          "attachment": "Untitled design (1).jpg",
+          "tags": [
+            ""
+          ]
+        },
+        {
+          "title": "sd",
+          "description": "dsdd",
+          "status": "Starting",
+          "startDate": "2024-12-06",
+          "endDate": "2024-12-19",
+          "designation": "UI/UX",
+          "attachment": "Rectangle 185 (2).png"
+        }
+      ],
+      "id": "e57a"
+    },
+    {
+      "id": "7e82",
+      "title": "In Progress",
+      "tasks": [
+        {
+          "title": "GIG",
+          "description": "Hello",
+          "status": "In Progress",
+          "startDate": "2024-12-06",
+          "endDate": "2024-12-28",
+          "designation": "React Developer",
+          "attachment": "image_2024_11_22T13_11_31_753Z.png"
+        }
+      ]
+    }
+  ]
+}
