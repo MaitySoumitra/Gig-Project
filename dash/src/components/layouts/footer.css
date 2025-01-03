@@ -1,0 +1,8 @@
+/* Footer.css */
+footer {
+    border-top: 1px solid #444;
+  }
+  
+  footer a:hover {
+    text-decoration: underline;
+  }

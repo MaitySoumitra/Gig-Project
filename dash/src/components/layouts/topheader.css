@@ -1,0 +1,33 @@
+.dashboard-logo{
+    margin-left: -80px !important;
+}
+h3.text-left.mb-4{
+    margin-left: 10px !important;
+}
+header.bg-light.py-3.shadow-sm{
+    background-color: #212529 !important;
+}
+.bi-bell::before{
+    color: #fff;
+}
+.bi-person-add::before{
+    color: #fff;
+    font-size: 30px;
+}
+
+.nav-link {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+  }
+  .nav-link:hover {
+    background-color: #495057;
+    text-decoration: none;
+  }
+  
+  /* Navbar */
+  .navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  
