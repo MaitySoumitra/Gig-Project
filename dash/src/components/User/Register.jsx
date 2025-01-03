@@ -3,14 +3,15 @@ import axios from 'axios';
 
 function Register({ onRegisterSuccess }) {
   const [formData, setFormData] = useState({
-    username: '',
+    firstName: '', // changed from 'username' to 'firstName'
+    lastName: '', // added lastName
     email: '',
     password: '',
     confirmPassword: '',
     errors: [],
   });
 
-  const { username, email, password, confirmPassword, errors } = formData;
+  const { firstName, lastName, email, password, confirmPassword, errors } = formData;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,8 +37,10 @@ function Register({ onRegisterSuccess }) {
     }
 
     try {
+      // Adjusted the payload to include firstName and lastName
       const response = await axios.post('http://localhost:3000/user/register', {
-        username,
+        firstName,  // changed from username to firstName
+        lastName,   // added lastName
         email,
         password,
         confirmPassword,
@@ -60,9 +63,18 @@ function Register({ onRegisterSuccess }) {
         <form onSubmit={handleRegister}>
           <input
             type="text"
-            name="username"
-            placeholder="Username"
-            value={username}
+            name="firstName"  // changed name from 'username' to 'firstName'
+            placeholder="First Name"
+            value={firstName}
+            onChange={handleChange}
+            required
+            className="form-input"
+          />
+          <input
+            type="text"
+            name="lastName"  // added lastName input field
+            placeholder="Last Name"
+            value={lastName}
             onChange={handleChange}
             required
             className="form-input"
