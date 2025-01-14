@@ -1,10 +1,45 @@
 const mongoose = require("mongoose");
-
+const bcrypt = require('bcryptjs');
 const memberSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  role: { type: String, required: true },
-  password: { type: String, required: true, minlength:6 },
+  role: { 
+    type: String, 
+    required: true },
+  password: { 
+    type: String, 
+    required: true, 
+    minlength:6 
+  },
+  photo: {
+    type: String,  
+    required: false, 
+},
+   status: {
+          type: String,
+          enum: ['active', 'inactive'],
+          default: 'active',
+      }, 
+      lastLogin: {
+          type: Date,
+          required: false, 
+      },
+      createdBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',  
+          required: false, 
+      },
+      updatedBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User', 
+          required: false, 
+      },
+      resetToken: {  
+          type: String,
+      },
+      resetTokenExpiration: {  
+          type: Date,
+      },
 },
 {
   timestamps: true,

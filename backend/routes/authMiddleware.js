@@ -11,6 +11,8 @@ const authMiddleware = async (req, res, next) => {
     try {
         // Verify the token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Look up user by ID from decoded token
         const user = await User.findById(decoded.user.id); // Ensure you're accessing the correct user field
 
         if (!user) {
@@ -18,10 +20,18 @@ const authMiddleware = async (req, res, next) => {
         }
 
         req.user = user; // Attach user to the request object
+
         next(); // Proceed to the next middleware or route handler
     } catch (error) {
-        console.error(error);
-        res.status(401).json({ errors: [{ msg: 'Invalid or expired token' }] });
+        console.error('Auth middleware error:', error);
+
+        // Handle token expiration error specifically
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({ errors: [{ msg: 'Token has expired' }] });
+        }
+
+        // Handle other JWT errors (invalid token)
+        return res.status(401).json({ errors: [{ msg: 'Invalid or expired token' }] });
     }
 };
 

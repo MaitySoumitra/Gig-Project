@@ -1,52 +1,64 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AuthPage.css';
-import Login from '../User/Login';
-import Register from '../User/Register';
+import Login from '../User/Login'; // User Login component
+import MemberLogin from '../Member/MemberLogin'; // Member Login component
+import Register from '../User/Register'; // Register component for users
 
-const AuthPage = ({ onLoginSuccess }) => {
-  const [isSignUp, setIsSignUp] = useState(false);
+const AuthPage = ({ onLoginSuccess, isMemberLogin }) => {
+  const [isSignUp, setIsSignUp] = useState(false); // Flag to toggle sign-up/login form for user
   const [registerData, setRegisterData] = useState({ email: '', password: '' });
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const toggleForm = () => {
-    setIsSignUp((prevState) => !prevState); 
+    setIsSignUp((prevState) => !prevState);
     if (isSignUp) {
-      navigate('/login'); 
+      navigate('/login'); // Redirect to user login
     } else {
-      navigate('/register'); 
+      navigate('/register'); // Redirect to register page (for user)
     }
   };
 
   const handleRegisterSuccess = (email, password) => {
     setRegisterData({ email, password });
     setIsSignUp(false);
-    navigate('/login');  // After successful registration, navigate to login
+    navigate('/login'); // After registration success, navigate to user login
   };
 
   return (
     <div className={`auth-container ${isSignUp ? 'active' : ''}`}>
+      {/* User or Member Login Form */}
       <div className="form-container sign-in-container">
-        <Login
-          onLoginSuccess={onLoginSuccess}
-          preFillData={registerData} // Pass the registerData to pre-fill the login form
-        />
+        {isMemberLogin ? (
+          <MemberLogin onLoginSuccess={onLoginSuccess} /> // Render member login form
+        ) : (
+          <Login
+            onLoginSuccess={onLoginSuccess}
+            preFillData={registerData}
+          /> // Render user login form
+        )}
       </div>
 
-      <div className="form-container sign-up-container">
-        <Register onRegisterSuccess={handleRegisterSuccess} />
-      </div>
+      {/* Only show sign-up container if it's not member login */}
+      {!isMemberLogin && (
+        <div className="form-container sign-up-container">
+          <Register onRegisterSuccess={handleRegisterSuccess} />
+        </div>
+      )}
 
       <div className="overlay">
-        <h1>{isSignUp ? 'Hello, User!' : 'Welcome Back!'}</h1>
+        <h1>{isMemberLogin ? 'Welcome Back, Member!' : 'Welcome Back!'}</h1>
         <p>
-          {isSignUp
-            ? "If you don't have an account, please sign up here."
+          {isMemberLogin
+            ? 'Members can log in here, no sign-up available.'
             : 'If you already have an account, please log in here.'}
         </p>
-        <button onClick={toggleForm}>
-          {isSignUp ? 'Sign In' : 'Sign Up'}
-        </button>
+        {/* Only show the toggle button if it's not member login */}
+        {!isMemberLogin && (
+          <button onClick={toggleForm}>
+            {isSignUp ? 'Sign In' : 'Sign Up'}
+          </button>
+        )}
       </div>
     </div>
   );

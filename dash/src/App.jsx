@@ -7,25 +7,36 @@ import { ToastContainer } from 'react-toastify';
 import PricePopup from './components/PricePopup';
 
 function App() {
+  // Retrieve both user and member tokens from localStorage/sessionStorage
   const [authToken, setAuthToken] = useState(localStorage.getItem('authToken') || sessionStorage.getItem('authToken'));
+  const [authTokenMember, setAuthTokenMember] = useState(localStorage.getItem('authTokenMember') || sessionStorage.getItem('authTokenMember'));
   const [showPopup, setShowPopup] = useState(false);
 
   // Handle login success and set auth token
-  const handleLoginSuccess = (token) => {
-    localStorage.setItem('authToken', token);  // Store token in localStorage
-    setAuthToken(token);  // Update the token state
-    setShowPopup(true);
+  const handleLoginSuccess = (token, isMember = false) => {
+    if (isMember) {
+      // For member login, store the token in the appropriate place
+      localStorage.setItem('authTokenMember', token);  // Store member token in localStorage
+      setAuthTokenMember(token);  // Update the member token state
+    } else {
+      // For user login, store the token in the appropriate place
+      localStorage.setItem('authToken', token);  // Store user token in localStorage
+      setAuthToken(token);  // Update the user token state
+    }
+    setShowPopup(true);  // Show the popup after successful login
   };
 
   // Handle logout and remove token
   const handleLogout = () => {
-    localStorage.removeItem('authToken');  // Clear token from localStorage
-    setAuthToken(null);  // Reset the token state
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('authTokenMember');  // Clear member token from localStorage
+    setAuthToken(null);  // Reset the user token state
+    setAuthTokenMember(null);  // Reset the member token state
   };
 
   useEffect(() => {
-    // Optional: Check authToken in useEffect to perform any side-effects like redirects
-  }, [authToken]);
+    // Optionally, check authToken and authTokenMember in useEffect if needed for redirects or other logic
+  }, [authToken, authTokenMember]);
 
   return (
     <Router>
@@ -33,25 +44,30 @@ function App() {
         {/* If the user is logged in, redirect to /dashboard */}
         <Route
           path="/"
-          element={authToken ? <Navigate to="/dashboard" /> : <AuthPage onLoginSuccess={handleLoginSuccess} />}
+          element={authToken || authTokenMember ? <Navigate to="/dashboard" /> : <AuthPage onLoginSuccess={handleLoginSuccess} />}
         />
-        
+
         {/* AuthPage handles both Login and Register toggles */}
         <Route path="/login" element={<AuthPage onLoginSuccess={handleLoginSuccess} />} />
         <Route path="/register" element={<AuthPage onLoginSuccess={handleLoginSuccess} />} />
-        
+
+        {/* Route for member login */}
+        <Route
+          path="/member/login"
+          element={<AuthPage onLoginSuccess={handleLoginSuccess} isMemberLogin={true} />}
+        />
+
         {/* Protected Route */}
         <Route
           path="/dashboard"
           element={
-            <PrivateRoute authToken={authToken}>
-              <Layout authToken={authToken} onLogout={handleLogout} />
+            <PrivateRoute authToken={authToken} authTokenMember={authTokenMember}>
+              <Layout authToken={authToken} authTokenMember={authTokenMember} onLogout={handleLogout} />
             </PrivateRoute>
           }
         />
       </Routes>
       {showPopup && <PricePopup onClose={() => setShowPopup(false)} />}
-     
     </Router>
   );
 }
