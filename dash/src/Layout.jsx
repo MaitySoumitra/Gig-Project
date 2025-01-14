@@ -9,18 +9,19 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import PrivateRoute from './components/PrivateRoute';  // Import the PrivateRoute
 
-function Layout({ authToken, onLogout }) {
+function Layout({ authToken, authTokenMember, onLogout }) {
   return (
     <div>
-      <TopHeader authToken={authToken} onLogout={onLogout} />
+      <TopHeader authToken={authToken || authTokenMember} onLogout={onLogout} />
       
-      {authToken ? ( 
+      {(authToken || authTokenMember) ? ( 
         <>
-          <Sidebar authToken={authToken} onLogout={onLogout}/>
+          <Sidebar authToken={authToken || authTokenMember} onLogout={onLogout}/>
           <div className="main-content">
             <ToastContainer />
             <Routes>
               <Route path="/dashboard" element={<div>Dashboard Content</div>} />
+              {/* You can add other routes here for both user and member dashboards */}
             </Routes>
           </div>
           <Footer />

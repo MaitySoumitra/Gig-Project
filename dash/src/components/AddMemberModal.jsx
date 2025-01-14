@@ -26,7 +26,7 @@ const AddMemberModal = ({ show, handleCloseModal }) => {
   // Handle form submission for adding a new member
   const onSubmit = async (data) => {
     try {
-      // Add the new member
+      // Add the new member with password
       await axios.post("http://localhost:3000/api/member", data);
       console.log("Member added successfully");
 
@@ -96,10 +96,21 @@ const AddMemberModal = ({ show, handleCloseModal }) => {
                     Select member role
                   </option>
                   <option value="Developer">Developer</option>
-                  <option value="UI & UX Designer">UI & UX Designer</option>
-                  
+                  <option value="UI & UX Designer">UI & UX Designer</option> 
                   <option value="BA Analyst">Business Analyst (BA)</option>
                 </select>
+              </div>
+
+              {/* Add password field */}
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="password"
+                  {...register("password", { required: true, minLength: 6 })}
+                  placeholder="Enter member password"
+                />
               </div>
 
               <button type="submit" className="btn btn-primary w-100 mt-3">
