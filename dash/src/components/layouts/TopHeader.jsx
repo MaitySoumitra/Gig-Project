@@ -73,7 +73,7 @@ const TopHeader = () => {
     <header className="bg-light py-3 shadow-sm">
       <div className="container d-flex align-items-center justify-content-between">
         <a href="/" className="navbar-brand d-flex align-items-center">
-          <img src={Logo} alt="Logo" className="dashboard-logo" style={{ height: '40px' }} />
+          <img src="https://designing.ahaanmedia.com/design/nocking.png" alt="Logo" className="dashboard-logo"  />
         </a>
 
         <div className="d-flex align-items-center gap-2" style={{ position: 'relative' }}>

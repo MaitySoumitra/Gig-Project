@@ -59,3 +59,94 @@ button:hover {
     font-size: 0.9em;
     text-align: left;
 }
+.divider {
+    text-align: center;
+    margin: 30px 0;
+    font-size: 14px;
+    color: #888;
+    position: relative;
+  }
+  .divider::before,
+  .divider::after {
+    content: '';
+    height: 1px;
+    background: #ccc;
+    position: absolute;
+    top: 50%;
+    width: 30%;
+  }
+  .divider::before {
+    left: 0;
+  }
+  .divider::after {
+    right: 0;
+  }
+  
+  .forgot-password-wrapper {
+    text-align: right;
+    margin-bottom: 30px;
+  }
+  
+  .forgot-password-link {
+    font-size: 13px;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  
+  
+  .google-login-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .google-login-btn {
+    width: 42px;
+    height: 42px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  
+  .google-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .premium-login-button {
+    width: 100%;
+    max-width: 300px;
+    background: linear-gradient(135deg, #1e3c72, #f953c6);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin:  0 auto;
+    display: block;
+    text-align: center;
+  }
+  
+  .premium-login-button:hover {
+   
+    color: rgb(255, 248, 189);
+   
+  }
+  
+  .premium-login-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  
+  

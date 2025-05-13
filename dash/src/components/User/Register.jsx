@@ -106,7 +106,7 @@ function Register({ onRegisterSuccess }) {
             required
             className="form-input"
           />
-          <button type="submit">Register</button>
+          <button type="submit" className="premium-login-button mt-3">Register</button>
         </form>
 
         {errors.length > 0 && (

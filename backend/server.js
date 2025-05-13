@@ -48,6 +48,7 @@ app.use('/api/plans', planRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use("/api/ticket", gigTicket);
 app.use("/api/member", memberRoutes);
+app.use('/auth', require('./routes/googleAuthRoutes'));
 
 
 

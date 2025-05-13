@@ -131,3 +131,22 @@ html, body {
   background: #ffffff;
   color: #b71c1c;
 }
+
+.auth-container.google-flow {
+  width: 500px; 
+}
+/* === Google Password Flow Layout Fix === */
+.auth-container.google-flow .sign-in-container {
+  padding: 10px;
+  width: 100%;
+  left: 0;
+  transform: none !important;
+}
+
+.auth-container.google-flow .sign-up-container {
+  display: none;
+}
+
+.auth-container.google-flow .overlay {
+  display: none;
+}
