@@ -5,6 +5,8 @@ import AuthPage from './components/layouts/AuthPage';
 import PrivateRoute from './components/PrivateRoute';
 import { ToastContainer } from 'react-toastify';
 import PricePopup from './components/PricePopup';
+import GoogleSetPassword from './components/User/GoogleSetPassword';
+import OAuthSuccess from './components/User/OauthSuccess';
 
 function App() {
   // Retrieve both user and member tokens from sessionStorage only
@@ -45,10 +47,15 @@ function App() {
         />
         <Route path="/login" element={<AuthPage onLoginSuccess={handleLoginSuccess} />} />
         <Route path="/register" element={<AuthPage onLoginSuccess={handleLoginSuccess} />} />
+        <Route path="/auth/google/set-password" element={<AuthPage />} />
+        <Route
+          path="/auth"
+          element={<AuthPage onLoginSuccess={handleLoginSuccess}/>}  />
         <Route
           path="/member/login"
           element={<AuthPage onLoginSuccess={handleLoginSuccess} isMemberLogin={true} />}
         />
+        <Route path="/auth/oauth-success" element={<OAuthSuccess/>} />
         <Route
           path="/dashboard"
           element={

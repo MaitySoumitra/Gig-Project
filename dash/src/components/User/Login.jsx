@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 const LoginPage = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false); // You can keep the UI if desired
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -24,7 +23,7 @@ const LoginPage = ({ onLoginSuccess }) => {
       const token = response.data.token;
 
       if (token) {
-        sessionStorage.setItem('authToken', token); // Only use sessionStorage
+        sessionStorage.setItem('authToken', token);
         onLoginSuccess(token);
         navigate('/dashboard');
         toast.success('Login successful!');
@@ -32,7 +31,7 @@ const LoginPage = ({ onLoginSuccess }) => {
     } catch (error) {
       console.error('Login error:', error);
 
-      if (error.response && error.response.data) {
+      if (error.response?.data) {
         setErrors(error.response.data.errors || [{ msg: 'Server error' }]);
         toast.error('Invalid credentials, please try again!');
       } else {
@@ -42,6 +41,10 @@ const LoginPage = ({ onLoginSuccess }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:3000/auth/google'; // Triggers backend Google OAuth route
   };
 
   return (
@@ -63,29 +66,31 @@ const LoginPage = ({ onLoginSuccess }) => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <div>
-            <label>
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
-              />
-              Remember Me
-            </label>
-          </div>
-          <button type="submit" disabled={loading}>Login</button>
-        </form>
 
-        {loading && <div className="loading">Logging in...</div>}
-        {errors.length > 0 && (
-          <div className="error-messages">
-            {errors.map((error, index) => (
-              <p key={index} className="error-text">
-                {error.msg}
-              </p>
-            ))}
+          {/* Forgot password link (right aligned) */}
+          <div className="forgot-password-wrapper">
+            <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
           </div>
-        )}
+
+          {/* Login button */}
+          <button type="submit" disabled={loading}  className="premium-login-button">Login</button>
+
+          {/* Divider */}
+          <div className="social-login-section">
+            <div className="divider">Sign-up with</div>
+
+            <div className="google-login-wrapper">
+              <div className="google-login-btn" onClick={handleGoogleLogin}>
+                <img
+                  src="https://developers.google.com/identity/images/g-logo.png"
+                  alt="Google"
+                  className="google-icon"
+                />
+              </div>
+            </div>
+          </div>
+
+        </form>
       </div>
     </div>
   );

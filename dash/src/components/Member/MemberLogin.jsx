@@ -65,16 +65,8 @@ const MemberLoginPage = () => {
             placeholder="Password" 
             required 
           />
-          <div>
-            <label>
-              <input 
-                type="checkbox" 
-                checked={rememberMe} 
-                onChange={() => setRememberMe(!rememberMe)} 
-              /> Remember Me
-            </label>
-          </div>
-          <button type="submit" disabled={loading}>Login</button>
+         
+          <button type="submit" disabled={loading} className="premium-login-button mt-4">Login</button>
         </form>
         {loading && <div>Loading...</div>}
         {errors.length > 0 && <div>{errors[0].msg}</div>}
