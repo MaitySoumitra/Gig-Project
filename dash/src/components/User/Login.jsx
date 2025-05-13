@@ -1,50 +1,46 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
-import {  toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
 
 const LoginPage = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false); // You can keep the UI if desired
   const [errors, setErrors] = useState([]);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const resetErrors = () => setErrors([]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    resetErrors();  
-    setLoading(true); 
+    resetErrors();
+    setLoading(true);
 
     try {
       const response = await axios.post('http://localhost:3000/user/login', { email, password });
       const token = response.data.token;
 
       if (token) {
-        if (rememberMe) {
-          localStorage.setItem('authToken', token);  
-        } else {
-          sessionStorage.setItem('authToken', token);  
-        }
+        sessionStorage.setItem('authToken', token); // Only use sessionStorage
         onLoginSuccess(token);
         navigate('/dashboard');
-        toast.success('Login successful!'); 
+        toast.success('Login successful!');
       }
     } catch (error) {
       console.error('Login error:', error);
 
       if (error.response && error.response.data) {
         setErrors(error.response.data.errors || [{ msg: 'Server error' }]);
-        toast.error('Invalid credentials, please try again!'); 
+        toast.error('Invalid credentials, please try again!');
       } else {
         setErrors([{ msg: 'An error occurred' }]);
-        toast.error('An error occurred, please try again later!'); 
+        toast.error('An error occurred, please try again later!');
       }
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -77,7 +73,7 @@ const LoginPage = ({ onLoginSuccess }) => {
               Remember Me
             </label>
           </div>
-          <button type="submit" disabled={loading}>Login</button> 
+          <button type="submit" disabled={loading}>Login</button>
         </form>
 
         {loading && <div className="loading">Logging in...</div>}
