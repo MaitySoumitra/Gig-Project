@@ -21,7 +21,7 @@ function Layout({ authToken, authTokenMember, onLogout }) {
             <ToastContainer />
             <Routes>
               <Route path="/dashboard" element={<div>Dashboard Content</div>} />
-              {/* You can add other routes here for both user and member dashboards */}
+             
             </Routes>
           </div>
           <Footer />

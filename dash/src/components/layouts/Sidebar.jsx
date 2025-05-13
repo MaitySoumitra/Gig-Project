@@ -21,37 +21,10 @@ import UserProfile from './UserProfile';
 
 const Sidebar = ({authToken, onLogout}) => {
   const [activeTab, setActiveTab] = useState('home');
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+ 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (authToken) {
-      axios.get('http://localhost:3000/user/me', {
-        headers: { Authorization: `Bearer ${authToken}` },
-        withCredentials: true
-      })
-      .then(response => {
-        setUser(response.data); 
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching user:", error);  
-        setUser(null);
-        setLoading(false);
-      });
-    } else {
-      setLoading(false); 
-    }
-  }, [authToken]);
-  
-  
-  const handleLogout = () => {
-    onLogout(); 
-    navigate('/login'); 
-  };
 
-  if (loading) return <div>Loading...</div>;
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -60,19 +33,8 @@ const Sidebar = ({authToken, onLogout}) => {
     <>
       <div className="header-container" style={{ display: 'flex', height: '100vh' }}>
         <div className="sidebar" style={{ width: '250px', padding: '20px' }}>
-        <Nav className="ml-auto">
-            {user ? (
-              <>
-                
-                <UserProfile/>
-              </>
-            ) : (
-              <Nav.Link href="/login">
-                <i className="bi bi-person-add"></i> 
-              </Nav.Link>
-            )}
-          </Nav>
-          <hr />
+       
+         
           <div className="nav" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <button
               className={`tab-button ${activeTab === 'home' ? 'active' : ''}`}
