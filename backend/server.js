@@ -1,56 +1,73 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const session = require('express-session');
-const dotenv = require('dotenv');
-const cors = require('cors'); 
-const authRoutes = require('./routes/auth');
-const planRoutes=require('./routes/planRoutes');
-const chatRoutes = require('./routes/chatRoutes');
-const userRoutes = require('./routes/userRoutes');
-const gigTicket=require('./routes/gigTicket')
-const taskRoutes=require('./routes/taskRoutes')
-const memberRoutes=require('./routes/memberRoutes')
-const path = require('path');
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const http = require("http");
+const { Server } = require("socket.io");
 
 dotenv.config();
 
 const app = express();
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-const sessionOptions={
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 1000 * 60 * 60 * 24,  
-        httpOnly: true,               
-        secure: false,              
-        sameSite: 'None',             
-    }
 
-}
-app.use(cors({
-    origin: 'http://localhost:5173',  
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,  
-}));
+/* ================= MIDDLEWARE ================= */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static("uploads"));
+app.use(cookieParser());
 
-mongoose.connect('mongodb://127.0.0.1:27017/user')
-    .then(() => console.log('MongoDB connected'))
-    .catch((err) => console.log(err));
+app.use(
+  cors({
+    origin:process.env.CORS_URL, // your frontend port
+    credentials: true,
+  })
+);
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json()); 
-app.use(session(sessionOptions));
+/* ================= DATABASE ================= */
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) =>
+    console.error("❌ MongoDB connection error:", err)
+  );
 
+/* ================= CREATE SERVER + SOCKET ================= */
+const server = http.createServer(app);
 
-app.use('/user', authRoutes); 
-app.use('/api/plans', planRoutes);
-app.use('/api/tasks', taskRoutes);
-app.use("/api/ticket", gigTicket);
-app.use("/api/member", memberRoutes);
-app.use('/auth', require('./routes/googleAuthRoutes'));
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CORS_URL,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 
+const socketHandler = require("./socket");
+socketHandler(io);
 
+/* ================= ROUTES ================= */
+app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/boards", require("./routes/boardRoute"));
+app.use("/api/column", require("./routes/columnRoute"));
+app.use("/api/tasks", require("./routes/taskRoutes"));
+app.use("/api/notifications", require("./routes/notificationRoute"));
+app.use("/api/chat", require("./routes/chatRoute"));
+app.use("/api/chat-request", require("./routes/chatRequestRoute"));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+/* ================= DEFAULT ROUTE ================= */
+app.get("/", (req, res) => {
+  res.send("🚀 Backend & Socket Server Running");
+});
+
+/* ================= ERROR HANDLER ================= */
+app.use((err, req, res, next) => {
+  console.error("Global error:", err.message);
+  res.status(400).json({ message: err.message });
+});
+
+/* ================= START SERVER ================= */
+const PORT = process.env.PORT || 5000;
+
+server.listen(PORT, () => {
+  console.log(`🚀 Server + Socket running on port ${PORT}`);
+});

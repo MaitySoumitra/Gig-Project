@@ -1,56 +1,29 @@
-const express = require('express');
-const Task = require('../models/Task');
+// routes/taskRoutes.js
 
-const router = express.Router();
-router.get('/', async (req, res) => {
-  try {
-    const tasks = await Task.find();
-    res.json(tasks);
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
-router.post('/', async (req, res) => {
-    const { name, start, end, progress = 0, steps = [], styles = {} } = req.body;
-    if (!name || !start || !end) {
-      return res.status(400).json({ error: 'Name, start, and end are required fields.' });
+const express = require('express');
+const router = express.Router(); 
+const { moveTask, updateTask, deleteTask, addTaskComment,  toggleTimer, getTasks, uploadtaskFile, deleteTaskFile } = require('../controller/taskController');
+const { protect } = require('../middleware/authMiddleware');
+const multer=require('multer')
+const path=require('path')
+
+const storage=multer.diskStorage({
+    destination:(req, file, cb)=>{
+        cb(null, 'uploads/')
+    },
+    filename: (req, file, cb)=>{
+        cb(null, `${Date.now()}-${file.originalname}`)
     }
-  
-    try {
-      const newTask = new Task({
-        name,
-        start: new Date(start), 
-        end: new Date(end),
-        progress,
-        steps,
-        styles,
-      });
-  
-      await newTask.save();
-      res.status(201).json(newTask);
-    } catch (err) {
-      console.error('Error creating task:', err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-  
-router.put('/:id', async (req, res) => {
-    const { progress } = req.body;
-    if (progress < 0 || progress > 100 || isNaN(progress)) {
-      return res.status(400).json({ message: 'Progress must be a number between 0 and 100' });
-    }
-  
-    try {
-      const task = await Task.findByIdAndUpdate(req.params.id, { progress }, { new: true });
-  
-      if (!task) {
-        return res.status(404).json({ message: 'Task not found' });
-      }
-      res.json(task);
-    } catch (err) {
-      console.error(err); 
-      res.status(500).send({ message: 'Server error while updating task' });
-    }
-  });
-  
+})
+
+const upload=multer({storage})
+
+router.patch('/:taskId/move', protect, moveTask);
+router.patch("/:taskId", protect, updateTask)
+router.delete("/:taskId", protect, deleteTask)
+router.post('/:taskId/comments', upload.array('files'), protect, addTaskComment)
+router.post('/:taskId/timer',protect, toggleTimer)
+router.post('/:taskId/upload',protect, upload.array('files'), uploadtaskFile)
+router.get('/', protect, getTasks);
+router.delete('/:taskId/upload/:fileId', protect, deleteTaskFile)
 module.exports = router;
